@@ -70,11 +70,7 @@ function ponerJugadores(noEquipo) {
     htmlElementoJugadores = document.getElementById("lista-equipo2");
     equipoNombre = document.getElementById("equipo2nombre")
   }
-
-
-
   //if (jugadoresEquipo[i][1] != undefined) { jugadoresEquipo[i][1] } else { "--" }
-
   let htmlJugadores = "";
   for (i = 0; i < jugadoresEquipo.length; i++) {
     htmlJugadores += "<tr>" +
@@ -83,10 +79,45 @@ function ponerJugadores(noEquipo) {
       "<td>" + jugadoresEquipo[i][2] + "</td>" +
       "<td>" + jugadoresEquipo[i][3] + "</td>" +
       "<td>" + jugadoresEquipo[i][4] + "</td>" +
-      "<td></td></tr>";
+      "<td><button onclick=\"equipoMarco(" + noEquipo + ", 1, '" + jugadoresEquipo[i][0] + "')\" >1</button>" +
+      "<button onclick = \"equipoMarco(" + noEquipo + ",2,'" + jugadoresEquipo[i][0] + "')\" > 2</button >" +
+      "<button onclick=\"equipoMarco(" + noEquipo + ",3,'" + jugadoresEquipo[i][0] + "')\">3</button></td ></tr>";
   }
   htmlElementoJugadores.innerHTML = htmlJugadores;
   equipoNombre.innerText = nombreEquipo;
 }
 
-console.log(htmlJugadores);
+function equipoMarco(noEquipo, puntos, jugador) {
+  let htmlElementoMarcador;
+  let jugadoresEquipo = noEquipo === 1 ? jugadoresEquipo1 : jugadoresEquipo2;
+  if (noEquipo === 1) {
+    marcadorEquipo1 += puntos;
+    htmlElementoMarcador = document.getElementById("marcadorEquipo1");
+
+  } else {
+    marcadorEquipo2 += puntos;
+    htmlElementoMarcador = document.getElementById("marcadorEquipo2");
+  }
+  htmlElementoMarcador.innerText = (noEquipo === 1 ? marcadorEquipo1 : marcadorEquipo2);
+  let numPlayera = buscarJugador(jugador, jugadoresEquipo);
+  let jugadorAnotador = `
+<tr>
+  <td>${numPlayera != undefined ? numPlayera : '--'}</td>
+  <td>${jugador}</td>
+  <td>${puntos}</td>
+</tr>
+  `;
+  let htmlElementoMarcadorAnotadores = (noEquipo === 1 ? document.getElementById("listaAnotadoresEquipo1") : document.getElementById("listaAnotadoresEquipo2"));
+  htmlElementoMarcadorAnotadores.innerHTML = htmlElementoMarcadorAnotadores.innerHTML + jugadorAnotador;
+}
+
+function buscarJugador(jugador, arregloJugadores) {
+  let i = 0;
+  do {
+    if (arregloJugadores[i][0] === jugador) {
+      return arregloJugadores[i][1];
+    }
+    i++;
+  } while (i < arregloJugadores.length);
+  return;
+}
